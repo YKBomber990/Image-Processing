@@ -11,23 +11,23 @@ using namespace std;
 
 int main(int argc, const char* argv[])
 {
-	// 2‰æ‘œ‚Ì“Ç‚İ‚İ
-	Mat image_src1 = imread("images/³–Ê.png", IMREAD_GRAYSCALE);
-	Mat image_src2 = imread("images/‰¡Šç(‰E).png", IMREAD_GRAYSCALE);
+	// 2ç”»åƒã®èª­ã¿è¾¼ã¿
+	Mat image_src1 = imread("images/æ­£é¢.png", IMREAD_GRAYSCALE);
+	Mat image_src2 = imread("images/æ¨ªé¡”(å³).png", IMREAD_GRAYSCALE);
 
-	// “Á’¥“_‚ğŒŸo‚µ, ‹Lqq‚ğŒvZ
+	// ç‰¹å¾´ç‚¹ã‚’æ¤œå‡ºã—, è¨˜è¿°å­ã‚’è¨ˆç®—
 	vector<KeyPoint> keypoint1, keypoint2;
 	Mat descriptor1, descriptor2;
 	auto detector = AKAZE::create(); // BRISK, CRB, KAZE, AKAZE
 	detector->detectAndCompute(image_src1, Mat(), keypoint1, descriptor1);
 	detector->detectAndCompute(image_src2, Mat(), keypoint2, descriptor2);
 
-	// ƒ}ƒbƒ`ƒ“ƒO‚ğÌ‚é
+	// ãƒãƒƒãƒãƒ³ã‚°ã‚’æ¡ã‚‹
 	BFMatcher matcher(NORM_HAMMING, true); // BRISK, CRB, AKAZE -- NORM_HAMMING KAZE -- NORM_L2
 	vector<DMatch> matches;
 	matcher.match(descriptor1, descriptor2, matches);
 
-	// —Ç‚¢ƒ}ƒbƒ`ƒ“ƒO‚ğ‘I‚Ô
+	// è‰¯ã„ãƒãƒƒãƒãƒ³ã‚°ã‚’é¸ã¶
 	Mat image_good_matches;
 	const float threshold = 75.0f;
 	vector<DMatch> good_matches;
@@ -37,10 +37,10 @@ int main(int argc, const char* argv[])
 			good_matches.push_back(*it);
 	}
 
-	// —Ç‚¢ƒ}ƒbƒ`ƒ“ƒO‚ğ•`‚­
+	// è‰¯ã„ãƒãƒƒãƒãƒ³ã‚°ã‚’æã
 	drawMatches(image_src1, keypoint1, image_src2, keypoint2, good_matches, image_good_matches);
-	imshow("AKAZEƒ}ƒbƒ`ƒ“ƒO‰æ‘œ(threshold = 90)", image_good_matches);
-	imwrite("images/Šç_“Á’¥“_.jpg", image_good_matches);
+	imshow("AKAZEãƒãƒƒãƒãƒ³ã‚°ç”»åƒ(threshold = 75.0)", image_good_matches);
+	imwrite("images/é¡”_ç‰¹å¾´ç‚¹.jpg", image_good_matches);
 
 	waitKey();
 	destroyAllWindows();
